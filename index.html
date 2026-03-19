@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NODE ZERO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/style.css"/>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+  <div id="intro-logo">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" id="intro-svg">
+      <polygon id="h1" points="100,18 163,55 163,129 100,166 37,129 37,55" fill="#3B8BEB"/>
+      <polygon id="h2" points="100,36 147,63 147,117 100,144 53,117 53,63" fill="#F4622A"/>
+      <polygon id="h3" points="100,54 131,71 131,105 100,122 69,105 69,71" fill="#25B87A"/>
+      <polygon id="h4" points="100,72 115,81 115,99 100,108 85,99 85,81" fill="#F9C623"/>
+      <polygon id="h5" points="100,84 108,89 108,111 100,116 92,111 92,89" fill="#fff"/>
+      <circle id="hc" cx="100" cy="100" r="10" fill="#3B8BEB"/>
+      <circle cx="100" cy="100" r="4" fill="#fff"/>
+    </svg>
+  </div>
+  <div id="intro-name">NODE ZERO</div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <svg viewBox="0 0 40 40" width="32" height="32">
+        <polygon points="20,3 35,11 35,29 20,37 5,29 5,11" fill="#3B8BEB"/>
+        <polygon points="20,9 29,14 29,26 20,31 11,26 11,14" fill="#F4622A"/>
+        <polygon points="20,15 25,18 25,22 20,25 15,22 15,18" fill="#F9C623"/>
+        <circle cx="20" cy="20" r="3" fill="#fff"/>
+      </svg>
+      <span>NODE ZERO</span>
+    </div>
+    <div class="nav-right">
+      <span id="nav-user"></span>
+      <button id="btn-auth" class="btn-outline">Entrar</button>
+      <button id="btn-logout" class="btn-ghost hidden">Sair</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Jogos feitos<br/><span class="accent">com paixão</span></h1>
+    <p>Explore, jogue e descubra os projetos do NODE ZERO studio.</p>
+  </section>
+
+  <!-- MINGAU CONTROLS -->
+  <div id="mingau-panel" class="hidden container">
+    <button id="btn-add" class="btn-primary">+ Adicionar link</button>
+  </div>
+
+  <!-- POSTS GRID -->
+  <main class="container" id="posts-container">
+    <div id="posts-grid"></div>
+    <div id="empty-state" class="hidden">
+      <p>Nenhum jogo cadastrado ainda.</p>
+    </div>
+  </main>
+
+</div>
+
+<!-- MODAL AUTH -->
+<div id="modal-auth" class="modal hidden">
+  <div class="modal-box">
+    <button class="modal-close" id="close-auth">×</button>
+    <div class="modal-tabs">
+      <button class="tab active" data-tab="login">Entrar</button>
+      <button class="tab" data-tab="register">Cadastrar</button>
+    </div>
+    <div id="tab-login" class="tab-content">
+      <input type="text" id="login-user" placeholder="Nome de usuário"/>
+      <input type="password" id="login-pass" placeholder="Senha"/>
+      <div class="form-error" id="login-err"></div>
+      <button class="btn-primary w100" id="do-login">Entrar</button>
+    </div>
+    <div id="tab-register" class="tab-content hidden">
+      <input type="text" id="reg-user" placeholder="Escolha um nome"/>
+      <input type="password" id="reg-pass" placeholder="Senha"/>
+      <div class="form-error" id="reg-err"></div>
+      <button class="btn-primary w100" id="do-register">Cadastrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD POST -->
+<div id="modal-post" class="modal hidden">
+  <div class="modal-box">
+    <button class="modal-close" id="close-post">×</button>
+    <h3>Adicionar link</h3>
+    <input type="text" id="post-title" placeholder="Título *"/>
+    <input type="url" id="post-url" placeholder="URL (opcional)"/>
+    <textarea id="post-desc" placeholder="Descrição (opcional)" rows="3"></textarea>
+    <label class="upload-label">
+      <span id="upload-text">📎 Adicionar thumbnail</span>
+      <input type="file" id="post-thumb" accept="image/*,video/*"/>
+    </label>
+    <div id="thumb-preview"></div>
+    <div class="form-error" id="post-err"></div>
+    <button class="btn-primary w100" id="do-post">Publicar</button>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/App.js"></script>
+</body>
+</html>
