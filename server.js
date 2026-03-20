@@ -49,6 +49,7 @@ const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname)));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use(session({
   secret: 'nodezero_secret_2025',
   resave: false,
