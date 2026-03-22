@@ -48,13 +48,9 @@
   </nav>
 
   <!-- HERO -->
-  <section class="hero" id="hero-section">
-    <div class="hero-bg" id="hero-bg"></div>
-    <div class="hero-content">
-      <h1>Jogos feitos<br/><span class="accent">com paixão</span></h1>
-      <p>Explore, jogue e descubra os projetos do NODE ZERO studio.</p>
-    </div>
-    <button id="btn-hero-edit" class="btn-hero-edit hidden" title="Editar banner">✏️</button>
+  <section class="hero">
+    <h1>Jogos feitos<br/><span class="accent">com paixão</span></h1>
+    <p>Explore, jogue e descubra os projetos do NODE ZERO studio.</p>
   </section>
 
   <!-- MINGAU CONTROLS -->
@@ -66,22 +62,86 @@
   </div>
 
   <!-- FILTER BAR -->
-  <div class="container filter-bar">
+  <div class="container" id="filter-bar">
+    <div id="tag-filters"></div>
     <div class="view-toggle">
-      <button class="view-btn active" data-view="grid" title="Grid">⊞</button>
-      <button class="view-btn" data-view="list" title="Lista">☰</button>
+      <button id="view-grid" class="view-btn active" title="Grade">⊞</button>
+      <button id="view-list" class="view-btn" title="Lista">☰</button>
     </div>
-    <div class="tag-filters" id="tag-filters"></div>
   </div>
 
   <!-- POSTS GRID -->
   <main class="container" id="posts-container">
     <div id="posts-grid"></div>
-    <div id="empty-state" class="hidden">
-      <p>Nenhum jogo cadastrado ainda.</p>
-    </div>
+    <div id="empty-state" class="hidden"><p>Nenhum jogo cadastrado ainda.</p></div>
   </main>
 
+</div>
+
+<!-- COMMUNITY BUTTON (floating left) -->
+<button id="community-fab" title="Comunidade">
+  <span class="fab-icon">💬</span>
+  <span id="community-fab-label">Comunidade</span>
+  <span id="community-unread" class="community-unread hidden">0</span>
+</button>
+
+<!-- COMMUNITY PANEL -->
+<div id="community-panel" class="community-panel hidden">
+  <div class="community-header">
+    <div class="community-title">
+      <svg viewBox="0 0 40 40" width="22" height="22">
+        <polygon points="20,3 35,11 35,29 20,37 5,29 5,11" fill="#3B8BEB"/>
+        <polygon points="20,9 29,14 29,26 20,31 11,26 11,14" fill="#F4622A"/>
+        <polygon points="20,15 25,18 25,22 20,25 15,22 15,18" fill="#F9C623"/>
+        <circle cx="20" cy="20" r="3" fill="#fff"/>
+      </svg>
+      <span>NODE ZERO · Comunidade</span>
+    </div>
+    <button id="community-close" class="community-close">×</button>
+  </div>
+
+  <!-- THREAD LIST VIEW -->
+  <div id="community-list-view">
+    <div class="community-toolbar">
+      <button id="btn-new-thread" class="btn-primary btn-sm">+ Nova thread</button>
+      <span class="community-subtitle"># geral</span>
+    </div>
+    <div id="threads-list"></div>
+  </div>
+
+  <!-- THREAD DETAIL VIEW -->
+  <div id="community-thread-view" class="hidden">
+    <div class="community-toolbar">
+      <button id="btn-back-threads" class="btn-ghost btn-sm">← Voltar</button>
+      <span id="thread-view-title" class="community-subtitle"></span>
+    </div>
+    <div id="thread-detail-content"></div>
+    <div id="reply-form-wrap" class="reply-form-wrap">
+      <div id="reply-paste-previews" class="paste-previews"></div>
+      <div class="reply-input-row">
+        <textarea id="reply-input" placeholder="Responder... (Ctrl+V para colar imagem)" rows="2"></textarea>
+        <button id="reply-submit" class="btn-primary btn-sm">↑</button>
+      </div>
+      <p id="reply-login-msg" class="muted-msg hidden">Faça <button class="btn-link" id="reply-login-link">login</button> para responder.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NEW THREAD -->
+<div id="modal-thread" class="modal hidden">
+  <div class="modal-box">
+    <button class="modal-close" id="close-thread">×</button>
+    <h3>Nova thread</h3>
+    <input type="text" id="thread-title" placeholder="Título da thread *"/>
+    <div id="thread-body-editor" class="rich-editor" contenteditable="true" data-placeholder="Escreva algo... (Ctrl+V para colar imagens)"></div>
+    <label class="upload-label">
+      <span id="thread-img-text">🖼️ Adicionar imagens</span>
+      <input type="file" id="thread-images" accept="image/*" multiple/>
+    </label>
+    <div id="thread-img-preview" class="paste-previews"></div>
+    <div class="form-error" id="thread-err"></div>
+    <button class="btn-primary w100" id="do-thread">Publicar thread</button>
+  </div>
 </div>
 
 <!-- MODAL AUTH -->
@@ -112,65 +172,84 @@
   <div class="modal-box modal-box-wide">
     <button class="modal-close" id="close-post">×</button>
     <h3 id="modal-post-title">Adicionar jogo</h3>
-
     <div class="form-grid">
       <div class="form-col">
         <label class="form-label">Título *</label>
         <input type="text" id="post-title" placeholder="Nome do jogo"/>
-
-        <label class="form-label">URL principal</label>
+        <label class="form-label">URL do jogo</label>
         <input type="url" id="post-url" placeholder="https://..."/>
-
+        <label class="form-label">Embed (YouTube / itch.io iframe URL)</label>
+        <input type="url" id="post-embed" placeholder="https://www.youtube.com/embed/..."/>
         <label class="form-label">Descrição curta</label>
-        <textarea id="post-desc" placeholder="Descrição curta do card" rows="2"></textarea>
-
-        <label class="form-label">Descrição completa</label>
-        <textarea id="post-long-desc" placeholder="Descrição detalhada para a página do jogo" rows="4"></textarea>
-
-        <label class="form-label">Tags (pressione Enter para adicionar)</label>
-        <div class="tag-input-wrap">
-          <div class="tags-preview" id="tags-preview"></div>
-          <input type="text" id="tag-input" placeholder="ex: mobile, PC, jam..."/>
-        </div>
+        <textarea id="post-desc" placeholder="Descrição curta (aparece no card)" rows="2"></textarea>
+        <label class="form-label">Descrição longa <span style="color:var(--muted);font-weight:400;">(Ctrl+V para colar imagens)</span></label>
+        <div id="post-long-desc-editor" class="rich-editor" contenteditable="true" data-placeholder="Descrição completa do jogo com imagens..."></div>
       </div>
-
       <div class="form-col">
+        <label class="form-label">Tags</label>
+        <div class="tags-input-wrap">
+          <div id="tags-preview" class="tags-preview"></div>
+          <input type="text" id="tags-input" placeholder="Ex: mobile, PC, jam..."/>
+        </div>
         <label class="form-label">Thumbnail</label>
         <label class="upload-label">
           <span id="upload-text">📎 Adicionar thumbnail</span>
           <input type="file" id="post-thumb" accept="image/*"/>
         </label>
         <div id="thumb-preview"></div>
-
-        <label class="form-label">Screenshots (múltiplas)</label>
+        <label class="form-label">Screenshots (até 10)</label>
         <label class="upload-label">
-          <span id="upload-screens-text">🖼️ Adicionar screenshots</span>
-          <input type="file" id="post-screens" accept="image/*" multiple/>
+          <span id="screenshots-text">📷 Adicionar screenshots</span>
+          <input type="file" id="post-screenshots" accept="image/*" multiple/>
         </label>
-        <div id="screens-preview" class="screens-preview"></div>
-
-        <label class="form-label">Links adicionais</label>
-        <div id="extra-links">
-          <div class="extra-link-row">
-            <input type="text" class="link-label" placeholder="Label (ex: itch.io)"/>
-            <input type="url" class="link-url" placeholder="URL"/>
-            <button class="btn-remove-link" type="button">×</button>
-          </div>
-        </div>
-        <button class="btn-ghost btn-add-link" id="btn-add-link" type="button">+ Adicionar link</button>
+        <div id="screenshots-preview"></div>
       </div>
     </div>
-
     <div class="form-error" id="post-err"></div>
     <button class="btn-primary w100" id="do-post">Publicar</button>
   </div>
 </div>
 
-<!-- MODAL DETAIL -->
+<!-- MODAL DETALHE DO JOGO -->
 <div id="modal-detail" class="modal hidden">
   <div class="modal-box modal-box-detail">
     <button class="modal-close" id="close-detail">×</button>
-    <div id="detail-content"></div>
+    <div id="detail-media"></div>
+    <div class="detail-header">
+      <div>
+        <h2 id="detail-title"></h2>
+        <div id="detail-tags" class="detail-tags"></div>
+      </div>
+      <div class="detail-actions">
+        <button id="detail-like-btn" class="btn-like">♥ <span id="detail-like-count">0</span></button>
+        <a id="detail-link" href="#" target="_blank" rel="noopener" class="btn-primary hidden">▶ Jogar</a>
+        <button id="detail-edit-btn" class="btn-outline hidden">✏️ Editar</button>
+      </div>
+    </div>
+    <div id="detail-stats" class="detail-stats">
+      <span>👁 <span id="detail-clicks">0</span> cliques</span>
+      <span>💬 <span id="detail-comment-count">0</span> comentários</span>
+    </div>
+
+    <!-- EMOJI REACTIONS -->
+    <div class="reactions-bar" id="detail-reactions-bar">
+      <div id="detail-reactions-display"></div>
+      <button class="btn-add-reaction" id="btn-add-reaction" title="Reagir">＋ 😀</button>
+    </div>
+    <div id="emoji-picker-post" class="emoji-picker hidden"></div>
+
+    <div id="detail-desc-long" class="detail-desc-long"></div>
+    <div class="screenshots-row" id="detail-screenshots"></div>
+
+    <div class="comments-section">
+      <h4>Comentários</h4>
+      <div id="comments-list"></div>
+      <div id="comment-form" class="comment-form hidden">
+        <textarea id="comment-input" placeholder="Escreva um comentário..." rows="2"></textarea>
+        <button id="comment-submit" class="btn-primary">Enviar</button>
+      </div>
+      <p id="comment-login-msg" class="muted-msg hidden">Faça <button class="btn-link" id="comment-login-link">login</button> para comentar.</p>
+    </div>
   </div>
 </div>
 
@@ -183,20 +262,8 @@
   </div>
 </div>
 
-<!-- MODAL HERO EDIT -->
-<div id="modal-hero" class="modal hidden">
-  <div class="modal-box">
-    <button class="modal-close" id="close-hero">×</button>
-    <h3>✏️ Editar Banner</h3>
-    <label class="upload-label">
-      <span>🖼️ Nova imagem de fundo</span>
-      <input type="file" id="hero-img-input" accept="image/*"/>
-    </label>
-    <div id="hero-preview"></div>
-    <button class="btn-primary w100" id="do-hero-save">Salvar banner</button>
-    <button class="btn-ghost w100" id="do-hero-remove">🗑️ Remover banner</button>
-  </div>
-</div>
+<!-- EMOJI PICKER TEMPLATE (shared) -->
+<div id="emoji-picker-global" class="emoji-picker hidden"></div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/App.js"></script>
